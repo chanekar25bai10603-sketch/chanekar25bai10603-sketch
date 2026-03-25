@@ -1,4 +1,20 @@
-## Hi there 👋
+# Hi 👋, I'm Sanskruti
+
+## 🌟 About Me
+- 🎓 Student
+- 💻 Learning Python & DSA
+- 🚀 Interested in AI & ML
+
+## 🛠️ Skills
+- Python
+- C++
+- HTML, CSS
+
+## 📫 Contact Me
+- Email: sanskrutichanekar@email.com
+
+## ⚡ Fun Fact
+- I love music & concerts 🎶
 
 <!--
 **chanekar25bai10603-sketch/chanekar25bai10603-sketch** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
