@@ -2,7 +2,7 @@
 I'm a **[University 1st year Btech Student]** passionate about building clean, user-friendly applications.
 
 ## 🌟 About Me
-- 🎓 Student
+- 🎓 Student Btech'29
 - 💻 Learning Python & DSA
 - 🚀 Interested in AI & ML
 
@@ -27,8 +27,8 @@ I'm a **[University 1st year Btech Student]** passionate about building clean, u
 
 ## MY SKILLS 
 🔭 I’m currently working on ML/AI: Scikit-Learn, Pandas, Data Visualization
-- 🌱 I’m currently learning to build the projects that combine ML models with modern web interfaces. Check out my pinned repos below!
-- 
+   I’m currently learning to build the projects that combine ML models with modern web interfaces. Check out my pinned repos below!
+ 
 ## 📫 Contact Me
 - Email: sanskrutichanekar@email.com
 - Linkdin: www.linkedin.com/in/sanskruti-chanekar-b5b7243b9
@@ -37,20 +37,6 @@ I'm a **[University 1st year Btech Student]** passionate about building clean, u
 - I love music & concerts 🎶
 - I am an enthusiastic learner.
 
-### 📊 GitHub Analytics
-
-<p align="left">
-  <!-- General Stats Card -->
-  <img src="https://vercel.app[chanekar25bai10603-sketch]&show_icons=true&theme=radical&rank_icon=github&count_private=true" alt="GitHub Stats" height="192px" />
-  
-  <!-- Streak Stats Card -->
-  <img src="https://herokuapp.com[chanekar25bai10603-sketch]&theme=radical" alt="GitHub Streak" height="192px" />
-</p>
-
-<p align="left">
-  <!-- Top Languages Card -->
-  <img src="https://vercel.app[chanekar25bai10603-sketch]&layout=compact&theme=radical&hide=html,css" alt="Top Languages" height="165px" />
-</p>
 
 
 <!--
