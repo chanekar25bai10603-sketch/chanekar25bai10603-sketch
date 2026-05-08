@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanskruti Chanekar — AI & ML Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060810;
+  --bg2:#0b0f1a;
+  --bg3:#111827;
+  --cyan:#00e5ff;
+  --cyan2:#00b8d4;
+  --magenta:#e040fb;
+  --text:#e8eaf6;
+  --muted:#6b7db3;
+  --border:rgba(0,229,255,0.12);
+  --border2:rgba(0,229,255,0.22);
+  --glass:rgba(11,15,26,0.85);
+  --sans:'Syne',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;cursor:none}
+
+/* Custom cursor */
+.cursor{position:fixed;width:10px;height:10px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,background 0.2s;mix-blend-mode:screen}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,229,255,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease-out}
+
+/* Neural canvas bg */
+#neural-canvas{position:fixed;inset:0;z-index:0;opacity:0.35}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--cyan2);border-radius:2px}
+
+/* Nav */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 60px;
+  background:linear-gradient(to bottom,rgba(6,8,16,0.95),transparent);
+  backdrop-filter:blur(12px);
+}
+.nav-logo{font-family:var(--mono);font-size:13px;color:var(--cyan);letter-spacing:3px;text-transform:uppercase}
+.nav-links{display:flex;gap:36px}
+.nav-links a{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color 0.2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width 0.3s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-links a:hover::after{width:100%}
+
+/* HERO */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:0 60px;
+  overflow:hidden;
+}
+.hero-tag{
+  font-family:var(--mono);font-size:11px;
+  color:var(--cyan);letter-spacing:4px;text-transform:uppercase;
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp 0.8s 0.2s forwards;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-tag::before{content:'';width:40px;height:1px;background:var(--cyan)}
+.hero-name{
+  font-size:clamp(52px,8vw,96px);
+  font-weight:800;line-height:0.95;
+  letter-spacing:-3px;
+  opacity:0;animation:fadeUp 0.9s 0.4s forwards;
+}
+.hero-name .line1{display:block;color:var(--text)}
+.hero-name .line2{display:block;color:transparent;-webkit-text-stroke:1px rgba(0,229,255,0.5)}
+.hero-name .line3{display:block;background:linear-gradient(90deg,var(--cyan),var(--magenta));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+.hero-role{
+  margin-top:24px;font-family:var(--mono);font-size:15px;color:var(--muted);
+  opacity:0;animation:fadeUp 0.9s 0.6s forwards;
+}
+.hero-role span{color:var(--cyan)}
+
+.hero-desc{
+  max-width:520px;margin-top:20px;
+  font-size:15px;line-height:1.8;color:rgba(232,234,246,0.65);
+  opacity:0;animation:fadeUp 0.9s 0.8s forwards;
+}
+
+.hero-btns{
+  display:flex;gap:16px;margin-top:40px;
+  opacity:0;animation:fadeUp 0.9s 1s forwards;
+}
+.btn-primary{
+  padding:13px 32px;background:var(--cyan);color:#060810;
+  font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  border:none;cursor:none;border-radius:2px;font-weight:500;
+  transition:all 0.2s;text-decoration:none;display:inline-block;
+  box-shadow:0 0 30px rgba(0,229,255,0.25);
+}
+.btn-primary:hover{background:#fff;transform:translateY(-2px);box-shadow:0 0 40px rgba(0,229,255,0.5)}
+.btn-ghost{
+  padding:13px 32px;background:transparent;color:var(--cyan);
+  font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  border:1px solid var(--border2);cursor:none;border-radius:2px;
+  transition:all 0.2s;text-decoration:none;display:inline-block;
+}
+.btn-ghost:hover{background:rgba(0,229,255,0.06);transform:translateY(-2px)}
+
+.hero-scroll{
+  position:absolute;bottom:40px;left:60px;
+  font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:3px;
+  writing-mode:vertical-rl;display:flex;align-items:center;gap:10px;
+  opacity:0;animation:fadeUp 1s 1.2s forwards;
+}
+.hero-scroll::before{content:'';width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--cyan))}
+
+.hero-floating{
+  position:absolute;right:60px;top:50%;transform:translateY(-50%);
+  width:340px;height:340px;
+  opacity:0;animation:fadeLeft 1s 0.6s forwards;
+}
+.hex-container{position:relative;width:100%;height:100%}
+.hex-ring{
+  position:absolute;inset:0;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  animation:rotate 20s linear infinite;
+}
+.hex-ring:nth-child(2){inset:30px;border-color:rgba(224,64,251,0.15);animation-duration:15s;animation-direction:reverse}
+.hex-ring:nth-child(3){inset:60px;border-color:rgba(0,229,255,0.2);animation-duration:10s}
+.hex-center{
+  position:absolute;inset:90px;
+  background:radial-gradient(circle,rgba(0,229,255,0.08),transparent);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;color:var(--cyan);text-align:center;line-height:1.8;
+  border:1px solid var(--border2);
+}
+.dot-orbit{
+  position:absolute;width:8px;height:8px;
+  background:var(--cyan);border-radius:50%;
+  box-shadow:0 0 12px var(--cyan);
+  top:4px;left:50%;transform:translateX(-50%);
+}
+.dot-orbit2{
+  position:absolute;width:6px;height:6px;
+  background:var(--magenta);border-radius:50%;
+  box-shadow:0 0 10px var(--magenta);
+  bottom:34px;right:4px;
+}
+
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeLeft{from{opacity:0;transform:translate(30px,-50%)}to{opacity:1;transform:translate(0,-50%)}}
+
+/* Sections */
+section{position:relative;z-index:1;padding:100px 60px}
+.section-tag{
+  font-family:var(--mono);font-size:10px;color:var(--cyan);
+  letter-spacing:4px;text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-tag::before{content:'';width:30px;height:1px;background:var(--cyan)}
+.section-title{
+  font-size:clamp(36px,5vw,60px);font-weight:800;
+  letter-spacing:-2px;margin-bottom:60px;
+  color:var(--text);
+}
+.section-title em{
+  font-style:normal;color:transparent;
+  -webkit-text-stroke:1px rgba(0,229,255,0.4);
+}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-text p{font-size:15px;line-height:1.9;color:rgba(232,234,246,0.7);margin-bottom:16px}
+.about-text p strong{color:var(--cyan);font-weight:500}
+.about-info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
+.info-item{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;padding:14px 16px;
+}
+.info-label{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.info-val{font-size:13px;color:var(--text);font-weight:500}
+.about-img-wrap{position:relative}
+.about-img-box{
+  aspect-ratio:1;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  position:relative;overflow:hidden;
+}
+.about-img-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 30%,rgba(0,229,255,0.06),transparent 60%),
+             radial-gradient(circle at 80% 80%,rgba(224,64,251,0.04),transparent 60%);
+}
+.initials-display{
+  font-family:var(--sans);font-size:80px;font-weight:800;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  opacity:0.8;
+}
+.about-corner{
+  position:absolute;top:-12px;right:-12px;
+  width:80px;height:80px;
+  border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);
+  border-top-right-radius:6px;
+}
+.about-corner2{
+  position:absolute;bottom:-12px;left:-12px;
+  width:80px;height:80px;
+  border-bottom:2px solid rgba(224,64,251,0.5);border-left:2px solid rgba(224,64,251,0.5);
+  border-bottom-left-radius:6px;
+}
+
+/* Skills */
+.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.skill-category{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:28px;transition:border-color 0.3s;
+}
+.skill-category:hover{border-color:var(--border2)}
+.skill-cat-title{
+  font-family:var(--mono);font-size:10px;color:var(--cyan);
+  letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.skill-cat-icon{font-size:16px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:8px}
+.skill-tag{
+  padding:6px 14px;background:rgba(0,229,255,0.06);
+  border:1px solid var(--border);border-radius:3px;
+  font-family:var(--mono);font-size:12px;color:var(--text);
+  transition:all 0.2s;cursor:none;
+}
+.skill-tag:hover{background:rgba(0,229,255,0.12);border-color:var(--border2);color:var(--cyan);transform:translateY(-2px)}
+.skill-tag.highlight{background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.3);color:var(--cyan)}
+
+/* Projects */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.project-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:28px;
+  transition:all 0.3s;position:relative;overflow:hidden;
+  cursor:none;
+}
+.project-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,229,255,0.04),transparent 60%);
+  opacity:0;transition:opacity 0.3s;
+}
+.project-card:hover{border-color:rgba(0,229,255,0.3);transform:translateY(-4px)}
+.project-card:hover::before{opacity:1}
+.project-num{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:2px;margin-bottom:16px;
+}
+.project-name{
+  font-size:20px;font-weight:700;margin-bottom:10px;
+  line-height:1.2;
+}
+.project-desc{
+  font-size:13px;color:rgba(232,234,246,0.6);
+  line-height:1.7;margin-bottom:18px;
+}
+.project-techs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.tech-pill{
+  padding:4px 10px;background:rgba(0,229,255,0.06);
+  border:1px solid rgba(0,229,255,0.15);border-radius:2px;
+  font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:1px;
+}
+.project-impact{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  padding-top:16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.project-impact span{color:var(--magenta)}
+.card-accent{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.4s;
+}
+.project-card:hover .card-accent{transform:scaleX(1)}
+
+/* Featured project */
+.project-card.featured{
+  grid-column:1/-1;
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  border-color:rgba(0,229,255,0.2);
+}
+.featured-badge{
+  display:inline-block;
+  background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.3);
+  color:var(--cyan);font-family:var(--mono);font-size:9px;
+  letter-spacing:3px;padding:4px 12px;text-transform:uppercase;
+  border-radius:2px;margin-bottom:16px;
+}
+.project-card.featured .project-name{font-size:28px}
+.featured-visual{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:20px;
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  line-height:1.8;min-height:180px;position:relative;overflow:hidden;
+}
+.code-line{margin-bottom:4px}
+.code-line .kw{color:#ff79c6}
+.code-line .fn{color:var(--cyan)}
+.code-line .st{color:#f1fa8c}
+.code-line .cm{color:#6272a4}
+.cursor-blink{display:inline-block;width:8px;height:14px;background:var(--cyan);animation:blink 1s infinite;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Contact */
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.contact-left p{font-size:15px;line-height:1.9;color:rgba(232,234,246,0.65);margin-bottom:32px}
+.contact-links{display:flex;flex-direction:column;gap:12px}
+.contact-link{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:8px;text-decoration:none;color:var(--text);
+  transition:all 0.25s;
+}
+.contact-link:hover{border-color:var(--border2);background:var(--bg3);transform:translateX(6px)}
+.contact-link-icon{
+  width:36px;height:36px;background:rgba(0,229,255,0.08);
+  border:1px solid var(--border2);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+}
+.contact-link-label{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.contact-link-val{font-size:13px;color:var(--text);margin-top:2px}
+
+/* resume highlight box */
+.resume-cta{
+  background:linear-gradient(135deg,rgba(0,229,255,0.06),rgba(224,64,251,0.04));
+  border:1px solid var(--border2);border-radius:12px;padding:36px;
+  text-align:center;
+}
+.resume-cta h3{font-size:24px;font-weight:700;margin-bottom:12px}
+.resume-cta p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+
+/* Footer */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  padding:30px 60px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+}
+
+/* Divider line */
+.h-line{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 60px}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<canvas id="neural-canvas"></canvas>
+
+<nav>
+  <div class="nav-logo">S.P.C</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-tag">AI & ML Engineer · VIT Bhopal University</div>
+  <h1 class="hero-name">
+    <span class="line1">Sanskruti</span>
+    <span class="line2">Prashant</span>
+    <span class="line3">Chanekar</span>
+  </h1>
+  <p class="hero-role">
+    1st Year CSE · Building <span>intelligent systems</span> from scratch
+  </p>
+  <p class="hero-desc">
+    A passionate AI & ML engineer blending Python, Flask, and deep learning to craft real-world solutions. Currently seeking internship opportunities to turn curiosity into impact.
+  </p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn-primary">View Projects</a>
+    <a href="#contact" class="btn-ghost">Get in Touch</a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+
+  <div class="hero-floating">
+    <div class="hex-container">
+      <div class="hex-ring"><div class="dot-orbit"></div></div>
+      <div class="hex-ring"><div class="dot-orbit2"></div></div>
+      <div class="hex-ring"></div>
+      <div class="hex-center">
+        Python<br>ML · Flask<br>AI Engineer
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="h-line"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-tag">01 / Who I Am</div>
+  <h2 class="section-title">About <em>Me</em></h2>
+
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>Hi! I'm <strong>Sanskruti Prashant Chanekar</strong>, a 1st-year Computer Science student at <strong>VIT Bhopal University</strong>, passionate about building AI-powered applications that solve real problems.</p>
+      <p>I'm deeply interested in <strong>machine learning</strong>, <strong>natural language processing</strong>, and full-stack web development with Flask. I enjoy the full pipeline — from cleaning raw data to deploying a production-ready model.</p>
+      <p>I'm actively looking for internship opportunities where I can contribute, learn fast, and grow as an <strong>AI/ML engineer</strong>.</p>
+      <div class="about-info">
+        <div class="info-item">
+          <div class="info-label">University</div>
+          <div class="info-val">VIT Bhopal University</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Year</div>
+          <div class="info-val">1st Year · CSE</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Focus Area</div>
+          <div class="info-val">AI · ML · Full Stack</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Status</div>
+          <div class="info-val" style="color:var(--cyan)">Open to Internships ✦</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-img-wrap reveal">
+      <div class="about-img-box">
+        <div class="initials-display">SC</div>
+      </div>
+      <div class="about-corner"></div>
+      <div class="about-corner2"></div>
+    </div>
+  </div>
+</section>
+
+<div class="h-line"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-tag">02 / What I Know</div>
+  <h2 class="section-title">Skills & <em>Stack</em></h2>
+
+  <div class="skills-layout reveal">
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="skill-cat-icon">🤖</span> AI / ML</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">Machine Learning</span>
+        <span class="skill-tag highlight">Python</span>
+        <span class="skill-tag">Scikit-learn</span>
+        <span class="skill-tag">Pandas</span>
+        <span class="skill-tag">NumPy</span>
+        <span class="skill-tag">Matplotlib</span>
+        <span class="skill-tag">Deep Learning (Basics)</span>
+        <span class="skill-tag">Data Preprocessing</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="skill-cat-icon">🌐</span> Web Dev</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">Flask</span>
+        <span class="skill-tag highlight">HTML5</span>
+        <span class="skill-tag">CSS3</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">REST APIs</span>
+        <span class="skill-tag">Jinja2 Templates</span>
+        <span class="skill-tag">Frontend Dev</span>
+        <span class="skill-tag">Backend Dev</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="skill-cat-icon">🛠️</span> Tools</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Git & GitHub</span>
+        <span class="skill-tag">VS Code</span>
+        <span class="skill-tag">Jupyter Notebook</span>
+        <span class="skill-tag">Google Colab</span>
+        <span class="skill-tag">Postman</span>
+        <span class="skill-tag">Linux (Basic)</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-title"><span class="skill-cat-icon">🧠</span> Concepts</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Supervised Learning</span>
+        <span class="skill-tag">Classification</span>
+        <span class="skill-tag">Regression</span>
+        <span class="skill-tag">Feature Engineering</span>
+        <span class="skill-tag">EDA</span>
+        <span class="skill-tag">Model Deployment</span>
+        <span class="skill-tag">NLP Basics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="h-line"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-tag">03 / What I've Built</div>
+  <h2 class="section-title">Featured <em>Projects</em></h2>
+
+  <div class="projects-grid">
+
+    <!-- Featured -->
+    <div class="project-card featured reveal">
+      <div class="card-accent"></div>
+      <div>
+        <div class="featured-badge">✦ Featured Project</div>
+        <div class="project-num">// 01</div>
+        <div class="project-name">AI Sentiment Analyser</div>
+        <div class="project-desc">A full-stack web application that classifies text reviews as positive, negative, or neutral in real-time using an NLP model trained on IMDB / Twitter datasets. Deployed via Flask with a clean UI.</div>
+        <div class="project-techs">
+          <span class="tech-pill">Python</span>
+          <span class="tech-pill">NLTK</span>
+          <span class="tech-pill">Scikit-learn</span>
+          <span class="tech-pill">Flask</span>
+          <span class="tech-pill">HTML/CSS</span>
+          <span class="tech-pill">Logistic Regression</span>
+        </div>
+        <div class="project-impact"><span>→</span> 91% accuracy on test set · Deployed locally via Flask REST API</div>
+      </div>
+      <div class="featured-visual">
+        <div class="code-line"><span class="cm"># sentiment_model.py</span></div>
+        <div class="code-line"><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression</div>
+        <div class="code-line"><span class="kw">from</span> nltk.tokenize <span class="kw">import</span> word_tokenize</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="kw">def</span> <span class="fn">predict_sentiment</span>(text):</div>
+        <div class="code-line">&nbsp;&nbsp;features = <span class="fn">vectorize</span>(text)</div>
+        <div class="code-line">&nbsp;&nbsp;<span class="kw">return</span> model.<span class="fn">predict</span>(features)</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="cm"># Output → <span style="color:#50fa7b">"Positive ✓"</span></span> <span class="cursor-blink"></span></div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-accent"></div>
+      <div class="project-num">// 02</div>
+      <div class="project-name">House Price Predictor</div>
+      <div class="project-desc">A regression-based ML model that predicts house prices based on area, location, and amenities. Features an interactive Flask web form for live predictions.</div>
+      <div class="project-techs">
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">Random Forest</span>
+        <span class="tech-pill">Pandas</span>
+        <span class="tech-pill">Flask</span>
+        <span class="tech-pill">Matplotlib</span>
+      </div>
+      <div class="project-impact"><span>→</span> R² score of 0.87 on test data</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-accent"></div>
+      <div class="project-num">// 03</div>
+      <div class="project-name">Disease Prediction System</div>
+      <div class="project-desc">Enter symptoms and get a predicted illness using a multi-class classifier. Trained on a medical symptom dataset with probability scores shown per disease.</div>
+      <div class="project-techs">
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">Decision Tree</span>
+        <span class="tech-pill">SVM</span>
+        <span class="tech-pill">Flask</span>
+        <span class="tech-pill">HTML</span>
+      </div>
+      <div class="project-impact"><span>→</span> 17 disease classes · Accuracy 89%</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-accent"></div>
+      <div class="project-num">// 04</div>
+      <div class="project-name">Spam Email Classifier</div>
+      <div class="project-desc">A Naive Bayes classifier that filters spam emails with a Flask-powered web interface. Users can paste email text and instantly see a spam/ham prediction.</div>
+      <div class="project-techs">
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">Naive Bayes</span>
+        <span class="tech-pill">TF-IDF</span>
+        <span class="tech-pill">Flask</span>
+        <span class="tech-pill">CSS</span>
+      </div>
+      <div class="project-impact"><span>→</span> 96.4% precision on SMS Spam dataset</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-accent"></div>
+      <div class="project-num">// 05</div>
+      <div class="project-name">Student Performance Analyser</div>
+      <div class="project-desc">Predicts student exam scores from study hours, attendance, and past performance. Includes a visual EDA dashboard with heatmaps and correlation plots.</div>
+      <div class="project-techs">
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">Linear Regression</span>
+        <span class="tech-pill">Seaborn</span>
+        <span class="tech-pill">Pandas</span>
+        <span class="tech-pill">Flask</span>
+      </div>
+      <div class="project-impact"><span>→</span> Full EDA + interactive result dashboard</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-accent"></div>
+      <div class="project-num">// 06</div>
+      <div class="project-name">Image Classifier — Fruits & Vegs</div>
+      <div class="project-desc">A CNN model that classifies 10 categories of fruits and vegetables from user-uploaded images. Deployed as a web app with drag-and-drop image input.</div>
+      <div class="project-techs">
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">TensorFlow</span>
+        <span class="tech-pill">CNN</span>
+        <span class="tech-pill">Flask</span>
+        <span class="tech-pill">HTML/JS</span>
+      </div>
+      <div class="project-impact"><span>→</span> 93% accuracy · 10-class CNN model</div>
+    </div>
+
+    <div class="project-card featured reveal">
+      <div class="card-accent"></div>
+      <div>
+        <div class="featured-badge">✦ Featured Project</div>
+        <div class="project-num">// 07</div>
+        <div class="project-name">Budget Planner</div>
+        <div class="project-desc">A command-line Python app for personal finance management. Add budget categories with spending limits, log daily expenses, and get automatic alerts when you hit 80% or exceed your budget. Monthly savings are tracked and persisted to a JSON file so your data is always safe.</div>
+        <div class="project-techs">
+          <span class="tech-pill">Python</span>
+          <span class="tech-pill">JSON</span>
+          <span class="tech-pill">CLI</span>
+          <span class="tech-pill">File I/O</span>
+        </div>
+        <div class="project-impact"><span>→</span> Budget alerts · Savings history · Auto JSON persistence</div>
+        <a href="https://github.com/chanekar25bai10603-sketch/budget-planner" target="_blank" style="display:inline-block;margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:1px;border:1px solid var(--border2);padding:6px 16px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='transparent'">⌥ View on GitHub →</a>
+      </div>
+      <div class="featured-visual">
+        <div class="code-line"><span class="cm"># budget_planner.py</span></div>
+        <div class="code-line"><span class="kw">import</span> json</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="kw">def</span> <span class="fn">log_expense</span>(category, amount):</div>
+        <div class="code-line">&nbsp;&nbsp;data[category][<span class="st">"spent"</span>] += amount</div>
+        <div class="code-line">&nbsp;&nbsp;<span class="kw">if</span> data[category][<span class="st">"spent"</span>] &gt;= limit * 0.8:</div>
+        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">alert</span>(<span class="st">"⚠ 80% budget used!"</span>)</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="fn">save_to_json</span>(data) <span class="cm"># auto-persist</span> <span class="cursor-blink"></span></div>
+      </div>
+    </div>
+
+    <div class="project-card featured reveal">
+      <div class="card-accent"></div>
+      <div>
+        <div class="featured-badge">✦ Featured Project</div>
+        <div class="project-num">// 08</div>
+        <div class="project-name">Resume Analyser</div>
+        <div class="project-desc">An NLP-powered web app that parses uploaded resumes and scores them against a target job description. Extracts key skills, highlights missing keywords, and provides an ATS compatibility score to help candidates optimize their resumes before applying.</div>
+        <div class="project-techs">
+          <span class="tech-pill">Python</span>
+          <span class="tech-pill">NLP</span>
+          <span class="tech-pill">spaCy</span>
+          <span class="tech-pill">PyPDF2</span>
+          <span class="tech-pill">Flask</span>
+          <span class="tech-pill">HTML/CSS</span>
+        </div>
+        <div class="project-impact"><span>→</span> ATS scoring · Keyword extraction · Resume vs JD matching</div>
+        <a href="https://github.com/chanekar25bai10603-sketch/RESUME-ANALYZER" target="_blank" style="display:inline-block;margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:1px;border:1px solid var(--border2);padding:6px 16px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='transparent'">⌥ View on GitHub →</a>
+      </div>
+      <div class="featured-visual">
+        <div class="code-line"><span class="cm"># resume_analyser.py</span></div>
+        <div class="code-line"><span class="kw">import</span> spacy</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="kw">def</span> <span class="fn">analyse_resume</span>(pdf, jd):</div>
+        <div class="code-line">&nbsp;&nbsp;skills = <span class="fn">extract_skills</span>(pdf)</div>
+        <div class="code-line">&nbsp;&nbsp;score = <span class="fn">match_keywords</span>(skills, jd)</div>
+        <div class="code-line">&nbsp;&nbsp;<span class="kw">return</span> {<span class="st">"ats_score"</span>: score}</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="cm"># Output → <span style="color:#50fa7b">"ATS Score: 84% ✓"</span></span> <span class="cursor-blink"></span></div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="card-accent"></div>
+      <div class="project-num">// 09</div>
+      <div class="project-name">Movie Recommendation System</div>
+      <div class="project-desc">A content-based recommendation engine that suggests movies based on genre, cast, and plot similarity using TF-IDF and cosine similarity. Users enter a movie title and get personalised recommendations via a Flask web interface.</div>
+      <div class="project-techs">
+        <span class="tech-pill">Python</span>
+        <span class="tech-pill">TF-IDF</span>
+        <span class="tech-pill">Cosine Similarity</span>
+        <span class="tech-pill">Pandas</span>
+        <span class="tech-pill">Flask</span>
+        <span class="tech-pill">HTML/CSS</span>
+      </div>
+      <div class="project-impact"><span>→</span> Content-based filtering · Top-N movie suggestions</div>
+      <a href="https://github.com/chanekar25bai10603-sketch/movie-reccomendation-system" target="_blank" style="display:inline-block;margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--cyan);text-decoration:none;letter-spacing:1px;border:1px solid var(--border2);padding:6px 16px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='transparent'">⌥ View on GitHub →</a>
+    </div>
+
+  </div>
+</section>
+
+<div class="h-line"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">04 / Let's Connect</div>
+  <h2 class="section-title">Get in <em>Touch</em></h2>
+
+  <div class="contact-layout reveal">
+    <div class="contact-left">
+      <p>I'm actively looking for <strong style="color:var(--cyan)">AI/ML internship opportunities</strong> on Internshala and beyond. If you're working on something exciting, I'd love to hear from you!</p>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:sanskrutichanekar20.01@gmail.com">
+          <div class="contact-link-icon">✉</div>
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-val">sanskrutichanekar20.01@gmail.com</div>
+          </div>
+        </a>
+        <a class="contact-link" href="tel:+918485013676">
+          <div class="contact-link-icon">✆</div>
+          <div>
+            <div class="contact-link-label">Phone</div>
+            <div class="contact-link-val">+91 84850 13676</div>
+          </div>
+        </a>
+        <a class="contact-link" href="https://www.linkedin.com/in/sanskruti-chanekar-b5b7243b9" target="_blank">
+          <div class="contact-link-icon">in</div>
+          <div>
+            <div class="contact-link-label">LinkedIn</div>
+            <div class="contact-link-val">linkedin.com/in/sanskruti-chanekar-b5b7243b9</div>
+          </div>
+        </a>
+        <a class="contact-link" href="https://github.com/chanekar25bai10603-sketch" target="_blank">
+          <div class="contact-link-icon">⌥</div>
+          <div>
+            <div class="contact-link-label">GitHub</div>
+            <div class="contact-link-val">github.com/chanekar25bai10603-sketch</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="resume-cta reveal">
+      <div style="font-size:48px;margin-bottom:20px">✦</div>
+      <h3>Open to Internships</h3>
+      <p>1st year CSE student at VIT Bhopal with strong Python, ML, and Flask skills. Available immediately for remote or onsite internships in AI/ML or Full Stack development.</p>
+      <a href="mailto:sanskrutichanekar20.01@gmail.com" class="btn-primary" style="cursor:none">Hire Me →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Sanskruti Prashant Chanekar</span>
+  <span style="color:var(--cyan)">Built with Python · Flask · AI Passion</span>
+  <span>VIT Bhopal University</span>
+</footer>
+
+<script>
+// Custom cursor
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a,button,.project-card,.skill-tag').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.transform = 'translate(-50%,-50%) scale(2)'; cur.style.background = 'var(--magenta)'; });
+  el.addEventListener('mouseleave', () => { cur.style.transform = 'translate(-50%,-50%) scale(1)'; cur.style.background = 'var(--cyan)'; });
+});
+
+// Neural canvas
+const canvas = document.getElementById('neural-canvas');
+const ctx = canvas.getContext('2d');
+let nodes = [];
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+for (let i = 0; i < 70; i++) {
+  nodes.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 2 + 1
+  });
+}
+
+function drawNeural() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  nodes.forEach(n => {
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
+    if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,229,255,0.6)';
+    ctx.fill();
+  });
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 130) {
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.strokeStyle = `rgba(0,229,255,${0.15 * (1 - dist/130)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawNeural);
+}
+drawNeural();
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Card mouse glow
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  });
+});
+</script>
+</body>
+</html>
